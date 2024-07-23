@@ -1,0 +1,63 @@
+Input: n = 13, k = 4
+
+Output: 2
+
+Explanation:
+Initially, the binary representations of n and k are n = (1101)2 and k = (0100)2.
+We can change the first and fourth bits of n. The resulting integer is n = (0100)2 = k.
+
+Example 2:
+
+Input: n = 21, k = 21
+
+Output: 0
+
+Explanation:
+n and k are already equal, so no changes are needed.
+
+Example 3:
+
+Input: n = 14, k = 13
+
+Output: -1
+
+Explanation:
+It is not possible to make n equal to k.
+
+ 
+
+Constraints:
+
+1 <= n, k <= 106
+
+solution:
+
+
+Step 1: Check Validity
+Perform bitwise AND operation: n & k. If the result is not equal to ( k ), it means ( n ) has bits set to 1 that cannot be matched to ( k ).
+if after and operation it need to convert that 1 & 0 or 0&1 will be zero so after and it need to convert in to onr element if not return -1;
+Step 2: Count 1 Bits in n and k
+Convert ( n ) and ( k ) to their binary string representations.
+Count the number of 1 bits in both representations.
+Step 3: Calculate the Result
+The difference res represents the number of changes needed to turn ( n ) into ( k ).
+
+
+class Solution {
+    public int minChanges(int n, int k) {
+        if ( (n & k) != k)
+            return -1;
+        
+        int res = 0;
+        
+        for (char c : Integer.toBinaryString(n).toCharArray()) {
+            res += c - '0';    "Only adding ones if it is '0' it is automatically been removed 
+        }
+        
+        for (char c : Integer.toBinaryString(k).toCharArray()) {
+            res -= c - '0';    '"we are sutraction so that we can find changes"
+        }
+        
+        return res;
+    }
+}
