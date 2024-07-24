@@ -1,0 +1,59 @@
+Given a list arr of n integers, return sums of all subsets in it. Output sums can be printed in any order.
+
+Example 1:
+
+Input:
+n = 2
+arr[] = {2, 3}
+Output:
+0 2 3 5
+Explanation:
+When no elements is taken then Sum = 0.
+When only 2 is taken then Sum = 2.
+When only 3 is taken then Sum = 3.
+When element 2 and 3 are taken then 
+Sum = 2+3 = 5.
+Example 2:
+
+Input:
+n = 3
+arr = {5, 2, 1}
+Output:
+0 1 2 3 5 6 7 8
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function subsetSums() which takes a list/vector and an integer n as an input parameter and returns the list/vector of all the subset sums.
+
+Expected Time Complexity: O(2n)
+Expected Auxiliary Space: O(2n)
+
+Constraints:
+1 <= n <= 15
+0 <= arr[i] <= 104
+
+solution :
+Here we are using recursions and calling that taking a looop in string and asking whether it add the element to sum or not 
+if yes:
+sum+arr[i],i++
+else:
+sum,i++,
+
+ater filling all places like 1,2,3 we went upto index 3 it is the final decision so at that time it added the sum of all substring to a ArrayList and finally we are sorting arrayList using collections and returning sorted arraylist
+
+class Solution {
+    void fun(int id,int sum,ArrayList<Integer> arr,int N,ArrayList<Integer> sumSubset){
+        if(id == N){
+            sumSubset.add(sum);
+            return;
+        }
+        //if accepting
+        fun(id+1,sum+arr.get(id),arr,N,sumSubset);
+        //if not accepting
+        fun(id+1,sum,arr,N,sumSubset);
+    }
+    ArrayList<Integer> subsetSums(ArrayList<Integer> arr, int n) {
+        ArrayList<Integer> sumSubset = new ArrayList<>();
+        fun(0,0,arr,n,sumSubset);
+        Collections.sort(sumSubset);
+        return sumSubset;
+    }
+}
