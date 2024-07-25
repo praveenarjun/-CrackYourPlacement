@@ -1,0 +1,108 @@
+90. Subsets II
+Solved
+Medium
+Topics
+Companies
+Given an integer array nums that may contain duplicates, return all possible 
+subsets
+ (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+
+
+solution:
+
+Solution 1: Brute Force
+
+Approach:
+At every index, we make a decision whether to pick or not pick the element at that index. This will help us in generating all possible combinations but does not take care of the duplicates. Hence we will use a set to store all the combinations that will discard the duplicates.
+
+Intuition: The main idea is that on every index you have two options either to select the element to add it to your subset(pick) or not select the element at that index and move to the next index(non-pick).
+
+Approach: Traverse through the array and for each index solve for two arrays, one where you pick the element,i.e add the element to the sum or don’t pick and move to the next element, recursively, until the base condition. Here when you reach the end of the array is the base condition.
+The unique subsets are
+[ [ ][ 1 ][ 1 2 ][ 1 2 2 ][ 2 ][ 2 2 ] ]
+
+Time Complexity: O( 2^n *(k log (x) )). 2^n  for generating every subset and k* log( x)  to insert every combination of average length k in a set of size x. After this, we have to convert the set of combinations back into a list of list /vector of vectors which takes more time.
+
+Space Complexity:  O(2^n * k) to store every subset of average length k. Since we are initially using a set to store the answer another O(2^n *k) is also used.
+
+import java.util.*;
+class TUF {
+    static void printAns(List < String > ans) {
+        System.out.println("The unique subsets are ");
+        System.out.println(ans.toString().replace(",", " "));
+    }
+    public static void fun(int[] nums, int index, List < Integer > ds, HashSet < String > res) {
+        if (index == nums.length) {
+            Collections.sort(ds);
+            res.add(ds.toString());
+            return;
+        }
+        ds.add(nums[index]);
+        fun(nums, index + 1, ds, res);
+        ds.remove(ds.size() - 1);
+        fun(nums, index + 1, ds, res);
+    }
+    public static List < String > subsetsWithDup(int[] nums) {
+        List < String > ans = new ArrayList < > ();
+        HashSet < String > res = new HashSet < > ();
+        List < Integer > ds = new ArrayList < > ();
+        fun(nums, 0, ds, res);
+        for (String it: res) {
+            ans.add(it);
+        }
+        return ans;
+    }
+
+    public static void main(String args[]) {
+        int nums[]={1,2,2};
+        List < String > ans = subsetsWithDup(nums);
+        printAns(ans);
+
+    }
+
+}
+
+
+
+part 2;
+optimaized way to reduce time complexity and space complexity
+
+class Solution {
+    public void fun(int id,int[] nums,List<Integer> ds,List<List<Integer>> ansList){
+        ansList.add(new ArrayList<>(ds));
+        for(int i=id;i<nums.length;i++){
+            if(i !=id && nums[i] == nums[i-1]) continue; //Not going to pick
+            ds.add(nums[i]);
+            fun(i+1,nums,ds,ansList);
+            ds.remove(ds.size()-1);
+        }
+    }
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> ansList = new ArrayList<>();
+        fun(0,nums,new ArrayList<>(),ansList);
+        return ansList;
+    }
+}
+Time Complexity: O(2^n) for generating every subset and O(k)  to insert every subset in another data structure if the average length of every subset is k. Overall O(k * 2^n).
+
+Space Complexity: O(2^n * k) to store every subset of average length k. Auxiliary space is O(n)  if n is the depth of the recursion tree.
