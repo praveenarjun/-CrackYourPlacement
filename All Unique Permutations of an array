@@ -1,0 +1,124 @@
+All Unique Permutations of an array
+Difficulty: MediumAccuracy: 52.85%Submissions: 40K+Points: 4
+Given an array arr[] of length n. Find all possible unique permutations of the array in sorted order. A sequence A is greater than sequence B if there is an index i for which Aj = Bj for all j<i and Ai > Bi.
+
+Example 1:
+
+Input: 
+n = 3
+arr[] = {1, 2, 1}
+Output: 
+1 1 2
+1 2 1
+2 1 1
+Explanation:
+These are the only possible unique permutations
+for the given array.
+Example 2:
+
+Input: 
+n = 2
+arr[] = {4, 5}
+Output: 
+Only possible 2 unique permutations are
+4 5
+5 4
+Your Task:
+You don't need to read input or print anything. You only need to complete the function uniquePerms() that takes an integer n, and an array arr of size n as input and returns a sorted list of lists containing all unique permutations of the array.
+
+Expected Time Complexity:  O(n*n!)
+Expected Auxilliary Space: O(n*n!)
+
+Constraints:
+1 ≤ n ≤ 9
+
+solution:
+
+//{ Driver Code Starts
+//Initial Template for JAVA
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+            int n = Integer.parseInt(read.readLine());
+            
+            String S[] = read.readLine().split(" ");
+            
+            ArrayList<Integer> arr = new ArrayList<>();
+            
+            for(int i=0; i<n; i++)
+                arr.add(Integer.parseInt(S[i]));
+
+            Solution ob = new Solution();
+            ArrayList<ArrayList<Integer>> res = ob.uniquePerms(arr,n);
+            for(int i=0; i<res.size(); i++)
+            {
+                for(int j=0; j<n; j++)
+                {
+                    System.out.print(res.get(i).get(j) + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+
+
+//User function Template for Java
+
+class Solution {
+    static ArrayList<ArrayList<Integer>> uniquePerms(ArrayList<Integer> arr, int n) {
+        // Sort the array to handle duplicates easily
+        Collections.sort(arr);
+        
+        // This will store all unique permutations
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        
+        // Set to keep track of visited elements
+        ArrayList<Integer> currentPerm = new ArrayList<>();
+        boolean[] visited = new boolean[n];
+        
+        // Start the backtracking process
+        generatePermutations(arr, result, currentPerm, visited);
+        
+        return result;
+    }
+
+    private static void generatePermutations(ArrayList<Integer> arr, ArrayList<ArrayList<Integer>> result, 
+                                              ArrayList<Integer> currentPerm, boolean[] visited) {
+        // If the current permutation is of the same length as the array, add to result
+        if (currentPerm.size() == arr.size()) {
+            result.add(new ArrayList<>(currentPerm));
+            return;
+        }
+        
+        for (int i = 0; i < arr.size(); i++) {
+            // Skip if the element is already visited or if it's a duplicate and the previous duplicate is not visited
+            if (visited[i] || (i > 0 && arr.get(i).equals(arr.get(i - 1)) && !visited[i - 1])) {
+                continue;
+            }
+            
+            // Mark the element as visited
+            visited[i] = true;
+            currentPerm.add(arr.get(i));
+            
+            // Recur to build the permutation
+            generatePermutations(arr, result, currentPerm, visited);
+            
+            // Backtrack
+            visited[i] = false;
+            currentPerm.remove(currentPerm.size() - 1);
+        }
+    }
+}
